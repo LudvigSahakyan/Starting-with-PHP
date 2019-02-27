@@ -1,5 +1,14 @@
 {
     "name": "administrateur/php-initiation",
 
-    "require": {}
+    "require": {
+        "ext-json": "*"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "PHPInitiation\\": "src/"
+
+        }
+    }
 }

@@ -1,12 +1,35 @@
 <?php
 
-$method = $_SERVER["REQUEST_METHOD"];
-$url = $_SERVER["REDIRECT_URL"];
+require __DIR__ . "/../vendor/autoload.php";
 
-if ("/php-initiation/public/home" === $url){
-    echo "home";
-} elseif ("/php-initiation/public/contact" === $url) {
-    echo "contact";
-} else {
-    echo "page non trouvé";
+use PHPInitiation\Controller\NotFound\NotFoundController;
+
+$url = filter_input(INPUT_SERVER, "REDIRECT_URL");
+$method = strtolower(filter_input(INPUT_SERVER,"REQUEST_METHOD" ));
+$routes = json_decode(file_get_contents(__DIR__ . "/../config/routes.json"));
+$baseClassName = "PHPInitiation\\Controller\\";
+$baseUrl = "/php-initiation/public";
+$_POST = $_GET = $_SERVER = null;
+
+foreach ($routes as $value) {
+    if ($url !== $baseUrl . $value->url) {
+        continue;
+    }
+    $methods = explode(",", strtolower($value->method));
+    if (!in_array($method, $methods)) {
+        header("HTTP/1.1 405 Method Not Allowed");
+        die("method not allowed");
+    }
+    $className = $baseClassName . str_replace(
+            "/",
+            "\\",
+            $value->controller
+        );
+    $controller = new $className();
+    $controller->{$value->action}();
+    exit;
 }
+header("HTTP/1.1 404 Page Not Found");
+$controller = new NotFoundController();
+$controller->read();
+
