@@ -2,7 +2,9 @@
 
 namespace PHPInitiation\Controller\Contact;
 
-class ContactController
+use PHPInitiation\Controller\Controller;
+
+class ContactController extends Controller
 {
 
     /**

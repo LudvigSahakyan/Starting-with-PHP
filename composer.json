@@ -2,7 +2,8 @@
     "name": "administrateur/php-initiation",
 
     "require": {
-        "ext-json": "*"
+        "ext-json": "*",
+        "ext-pdo": "*"
     },
 
     "autoload": {

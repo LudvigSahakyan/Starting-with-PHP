@@ -2,15 +2,17 @@
 
 namespace PHPInitiation\Controller\Users;
 
+use PHPInitiation\Controller\Controller;
 use PHPInitiation\Model\User\User;
 use PHPInitiation\Model\User\UserAvatar;
 use PHPInitiation\Model\User\UserInfo;
 use PHPInitiation\Model\User\UserLogin;
 use PHPInitiation\Validator\User\ValidateInfo;
 use PHPInitiation\Validator\User\ValidateLogin;
+use PHPInitiation\Validator\User\ValidateSignIn;
 
 
-class UsersController
+class UsersController extends Controller
 {
 
     /**
@@ -19,20 +21,46 @@ class UsersController
     public function new()
     {
 
+
+
+
         $error = [];
 
         if (filter_input(INPUT_POST, "signin")) {
-
-            $validateLogin = new ValidateLogin();
+            $validateSignIn = new ValidateSignIn();
             $validateInfo = new ValidateInfo();
-            $error =  $validateLogin->valid() + $validateInfo->valid();
+            $error = $validateSignIn->valid() + $validateInfo->valid();
 
+            if (0 === count($error)) {
+
+                $email = filter_input(INPUT_POST, "email");
+                $password = password_hash(filter_input(INPUT_POST, "password"), PASSWORD_DEFAULT);
+
+                try {
+                    $dbh = $this->getConnection();
+                    $sql = "INSERT INTO `user_login`(`email`, `password`)"
+                        . "VALUES (:email, :password)";
+                    $sth = $dbh->prepare($sql);
+                    $sth->bindValue(":email", $email);
+                    $sth->bindValue(":password", $password);
+                    $sth->execute();
+                    //redirection sur login
+                    header("location: login");
+                } catch (\PDOException $e) {
+
+                    if ("23000" === $e->getCode()) {
+                        $error["email"] = "A user with this email already exists!";
+                    } else {
+                        $error["pdo"] = "It seems we have technical problems, please try later" . $e->getMessage();
+                    }
+                }
+            }
         }
 
-        $title = "Sign In";
-        include __DIR__ . "/../../../template/users/users_new.html.php";
-        include __DIR__ . "/../../../template/users/form_new.html.php";
-
+        $this->render("users/users_new.html.php", [
+            "title" => "Sign In",
+            "error" => $error
+        ]);
 
     }
 
@@ -41,32 +69,22 @@ class UsersController
      */
     public function read()
     {
-        $avatar = new UserAvatar();
-        $login = new UserLogIn();
+        try {
+            $dbh = $this->getConnection();
+            $sql ="SELECT `email` FROM `user_login`";
+            $sth = $dbh->prepare($sql);
+            $sth->execute();
+            $sth->setFetchMode(\PDO::FETCH_CLASS, UserLogIn::class);
+            $users = $sth->fetchAll();
 
-        $user1 = new User();
-        $info1 = new UserInfo();
-        $user1->setInfo($info1);
-        $info1->setFirstname("jim");
+        } catch (\PDOException $e) {
 
-        $info2 = new UserInfo();
-        $user2 = new User();
-        $user2->setInfo($info2);
-        $info2->setFirstname("john");
+        }
+        $this->render("users/users.html.php", [
+            "title" => "Users",
+            "users" => $users
+        ]);
 
-        $user3 = new User();
-        $info3 = new UserInfo();
-        $user3->setInfo($info3);
-        $info3->setFirstname("carrey");
-
-        $users = [
-            $user1,
-            $user2,
-            $user3
-        ];
-
-        $title = "Users";
-        include __DIR__ . "/../../../template/users/users.html.php";
     }
 
     /**

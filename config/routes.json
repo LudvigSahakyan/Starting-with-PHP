@@ -30,16 +30,9 @@
 
   "users_login": {
     "url": "/login",
-    "controller": "LogIn/LogInController",
-    "action": "read",
-    "method": "get"
-  },
-
-  "users_logout": {
-    "url": "/logout",
-    "controller": "LogOut/LogOutController",
-    "action": "read",
-    "method": "get"
+    "controller": "LogIn/LoginController",
+    "action": "login",
+    "method": "get,post"
   }
 
 }

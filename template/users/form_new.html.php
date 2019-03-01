@@ -1,37 +1,9 @@
-<form class="row col-12 col-md-10 offset-md-1" method="post" action="">
-
-    <div class="col-6">
-        <div class="form-group">
 
 
-            <label>Email address*</label>
+  <?php
 
-
-            <?php if (array_key_exists("email", $error)) :
-                $message = $error["email"];
-                include __DIR__ . "/../shared/alert.html.php";
-            endif ?>
-
-
-            <input name="email" class="form-control"
-                   placeholder="Enter email"
-                   value="<?= filter_input(INPUT_POST, "email", FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?>">
-        </div>
-
-        <div class="form-group">
-
-            <label>Password*</label>
-
-            <?php if (array_key_exists("password", $error)) :
-                $message = $error["password"];
-                include __DIR__ . "/../shared/alert.html.php";
-            endif ?>
-
-
-            <input name="password" class="form-control"
-                   placeholder="Password"
-                   value="<?= filter_input(INPUT_POST, "password", FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?>">
-        </div>
+    include __DIR__ . "/../login/form-login.html.php";
+   ?>
 
         <div class="form-group">
 
@@ -99,4 +71,3 @@
         </div>
     </div>
 
-</form>

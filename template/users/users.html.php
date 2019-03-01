@@ -14,7 +14,7 @@ include __DIR__ . "/../shared/start.html.php";
         foreach ($users as $value) : ?>
             <tr>
                 <th>
-                    <?= $value -> getInfo()->getFirstName() ?>
+                    <?= $value->getEmail() ?>
                 </th>
 
             </tr>

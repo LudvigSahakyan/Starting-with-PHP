@@ -23,7 +23,7 @@ class User
         /**
          * @var int
          */
-        $id,
+        $identity,
 
         /**
          * @var UserInfo
@@ -46,15 +46,15 @@ class User
      */
     public function getId(): ?int
     {
-        return $this->id;
+        return $this->identity;
     }
 
     /**
-     * @param mixed $id
+     * @param mixed $identity
      */
-    public function setId(int $id)
+    public function setId(int $identity)
     {
-        $this->id = $id;
+        $this->identity = $identity;
     }
 
     /**

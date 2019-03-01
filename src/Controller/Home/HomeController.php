@@ -2,7 +2,9 @@
 
 namespace PHPInitiation\Controller\Home;
 
-class HomeController
+use PHPInitiation\Controller\Controller;
+
+class HomeController extends Controller
 {
 
     /**

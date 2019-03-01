@@ -11,7 +11,7 @@ class ValidateInfo extends Validator
 
     public function valid(): array
     {
-        $this->post();
+
         $error = [];
 
         if ($this->post("firstname")

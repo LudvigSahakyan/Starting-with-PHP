@@ -19,7 +19,7 @@ class UserLogIn
         /**
          * @var string
          */
-        $mail,
+        $email,
 
         /**
          * @var string
@@ -29,17 +29,17 @@ class UserLogIn
     /**
      * @return mixed
      */
-    public function getMail(): ?string
+    public function getEmail(): ?string
     {
-        return $this->mail;
+        return $this->email;
     }
 
     /**
      * @param mixed $mail
      */
-    public function setMail(string $mail)
+    public function setEmail(string $email)
     {
-        $this->mail = $mail;
+        $this->email = $email;
     }
 
     /**

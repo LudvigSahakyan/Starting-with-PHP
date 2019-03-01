@@ -9,7 +9,9 @@
 namespace PHPInitiation\Controller\NotFound;
 
 
-class NotFoundController
+use PHPInitiation\Controller\Controller;
+
+class NotFoundController extends Controller
 {
 
     /**
