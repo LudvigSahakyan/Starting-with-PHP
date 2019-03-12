@@ -11,8 +11,12 @@ include __DIR__ . "/../shared/start.html.php";
     <br/>
     <br/>
 
-
-
+    <?php
+    $this->session("user")
+        ? include __DIR__ . "/../login/logoutbutton.html.php"
+        : include __DIR__ . "/../login/loginbutton.html.php";
+    ?>
+ <!-- a ameliroer avec un navbar dans le start-->
 
 </div>
 

@@ -10,7 +10,7 @@
             <label>Confirm password*</label>
 
 
-            <input name="confirm" class="form-control"
+            <input name="confirm" class="form-control" type="password"
                    placeholder="Confirm"
                    value="<?= filter_input(INPUT_POST, "confirm", FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?>">
         </div>

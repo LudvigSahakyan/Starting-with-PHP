@@ -33,6 +33,14 @@
     "controller": "LogIn/LoginController",
     "action": "login",
     "method": "get,post"
+  },
+
+  "users_logOut": {
+    "url": "/logout",
+    "controller": "LogIn/LoginController",
+    "action": "logout",
+    "method": "get"
   }
+
 
 }

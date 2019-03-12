@@ -13,22 +13,25 @@ class Controller
 
         include __DIR__ . "/../../template/" . $filename;
 
-
-
     }
 
-    protected function getConnection()
+    protected function session ($key = null, $value = null)
     {
+        if (PHP_SESSION_ACTIVE !== session_status()) {
 
-        $dbh = new \PDO(
-            "mysql:host=localhost;dbname=formation_php;charset=utf8",
-            "root",
-            "",
-            [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION]
-        );
-        return $dbh;
+            session_start();
+        }
+        if (null !== $key && null !== $value) {
+
+            $_SESSION [$key] = $value;
+        } elseif (null !== $key && false !== $key) {
+            return array_key_exists($key, $_SESSION) ? $_SESSION[$key] : null;
+        } elseif (false === $key) {
+            session_destroy();
+            $_SESSION = [];
+        }
+
     }
-
 
 
 }

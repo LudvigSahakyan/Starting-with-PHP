@@ -1,0 +1,1 @@
+<input type="submit" name="login" value="Log In" class="btn btn-primary"/>

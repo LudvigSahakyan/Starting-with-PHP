@@ -17,6 +17,11 @@ class UserLogIn
     private
 
         /**
+         * @var int
+         */
+        $id,
+
+        /**
          * @var string
          */
         $email,
@@ -25,6 +30,25 @@ class UserLogIn
          * @var string
          */
         $password;
+
+
+    /**
+     * @return mixed
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $identity
+     */
+    public function setId(int $id)
+    {
+        $this->id = $id;
+    }
+
+
 
     /**
      * @return mixed

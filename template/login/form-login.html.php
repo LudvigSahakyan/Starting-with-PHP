@@ -35,7 +35,7 @@
         endif ?>
 
 
-        <input name="password" class="form-control"
+        <input name="password" class="form-control" type="password"
                placeholder="Password"
                value="<?= filter_input(INPUT_POST, "password", FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?>">
     </div>

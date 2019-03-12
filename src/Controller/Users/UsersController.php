@@ -3,12 +3,8 @@
 namespace PHPInitiation\Controller\Users;
 
 use PHPInitiation\Controller\Controller;
-use PHPInitiation\Model\User\User;
-use PHPInitiation\Model\User\UserAvatar;
-use PHPInitiation\Model\User\UserInfo;
-use PHPInitiation\Model\User\UserLogin;
+use PHPInitiation\Repository\User\UserLoginRepository;
 use PHPInitiation\Validator\User\ValidateInfo;
-use PHPInitiation\Validator\User\ValidateLogin;
 use PHPInitiation\Validator\User\ValidateSignIn;
 
 
@@ -21,31 +17,23 @@ class UsersController extends Controller
     public function new()
     {
 
-
-
-
+        if ($this->session("user")) {
+            header("location: home" );
+            exit;
+        }
         $error = [];
 
         if (filter_input(INPUT_POST, "signin")) {
-            $validateSignIn = new ValidateSignIn();
-            $validateInfo = new ValidateInfo();
-            $error = $validateSignIn->valid() + $validateInfo->valid();
-
-            if (0 === count($error)) {
-
-                $email = filter_input(INPUT_POST, "email");
-                $password = password_hash(filter_input(INPUT_POST, "password"), PASSWORD_DEFAULT);
-
+            $error = (new ValidateSignIn())->valid() + (new ValidateInfo())->valid();
+            if (!$error) {
                 try {
-                    $dbh = $this->getConnection();
-                    $sql = "INSERT INTO `user_login`(`email`, `password`)"
-                        . "VALUES (:email, :password)";
-                    $sth = $dbh->prepare($sql);
-                    $sth->bindValue(":email", $email);
-                    $sth->bindValue(":password", $password);
-                    $sth->execute();
-                    //redirection sur login
+                    $repository = new UserLoginRepository();
+                    $repository->persist(
+                        filter_input(INPUT_POST, "email"),
+                        password_hash(filter_input(INPUT_POST, "password"), PASSWORD_DEFAULT)
+                        );
                     header("location: login");
+                    exit;
                 } catch (\PDOException $e) {
 
                     if ("23000" === $e->getCode()) {
@@ -70,21 +58,16 @@ class UsersController extends Controller
     public function read()
     {
         try {
-            $dbh = $this->getConnection();
-            $sql ="SELECT `email` FROM `user_login`";
-            $sth = $dbh->prepare($sql);
-            $sth->execute();
-            $sth->setFetchMode(\PDO::FETCH_CLASS, UserLogIn::class);
-            $users = $sth->fetchAll();
-
+            $repository = new UserLoginRepository();
+            $users = $repository->findAll();
         } catch (\PDOException $e) {
-
+            $error["pdo"] = "It seems we have technical problems, please try later" . $e->getMessage();
         }
+
         $this->render("users/users.html.php", [
             "title" => "Users",
             "users" => $users
         ]);
-
     }
 
     /**
